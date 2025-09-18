@@ -107,5 +107,5 @@ This notebook provides a powerful interface to search the AACT clinical trials d
 ### Output
 
 -   The notebook prints a summary of the search results and an analysis of the found trials.
--   The primary output is a **CSV file** containing the search results. The filename is generated dynamically based on the search query and timestamp (e.g., `clinical_trials_Alpha-2-macroglobulin_20250919_103000.csv`).
--   A second, more detailed CSV file can also be generated, containing comprehensive information for each trial (e.g., `comprehensive_clinical_trials_20250919_103000.csv`).
+-   The primary output is a **CSV file** containing the search results. The filename is generated dynamically based on the search query and timestamp (e.g., `comprehensive_Alpha_2_macroglobulin_trials_20250913_192702.csv`).
+- Find the same in the `result_files` folder.
