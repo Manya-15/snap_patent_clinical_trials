@@ -1,7 +1,7 @@
 # Patent Data Analysis Scripts
 
-This repository contains a collection of Python scripts within Jupyter notebooks for searching, downloading, and analyzing patent data from various sources like the European Patent Office (EPO), Lens.org, and PubChem.
-
+Collection of Python scripts within Jupyter notebooks for searching, downloading, and analyzing patent data from various sources like the European Patent Office (EPO), Lens.org, and PubChem.
+Result files are in the result_files folder
 ## Scripts Overview
 
 ### 1. `epo_final.ipynb`
