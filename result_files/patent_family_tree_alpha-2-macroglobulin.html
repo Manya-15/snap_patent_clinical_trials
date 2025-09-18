@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 800px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "red", "id": "patent", "label": "Patent Root", "shape": "box"}, {"color": "orange", "id": "IB 2023060487 W", "label": "IB 2023060487 W", "shape": "ellipse", "title": "Jurisdiction: WO\u003cbr\u003eType: Search Report\u003cbr\u003eStatus: PENDING"}, {"color": "lightblue", "id": "TW 112139681 A", "label": "TW 112139681 A", "shape": "ellipse", "title": "Jurisdiction: TW\u003cbr\u003eType: Patent of Addition\u003cbr\u003eStatus: PENDING"}, {"color": "orange", "id": "GB 2016050249 W", "label": "GB 2016050249 W", "shape": "ellipse", "title": "Jurisdiction: WO\u003cbr\u003eType: Patent Application\u003cbr\u003eStatus: PENDING"}, {"color": "lightblue", "id": "EP 16704045 A", "label": "EP 16704045 A", "shape": "ellipse", "title": "Jurisdiction: EP\u003cbr\u003eType: Patent Application\u003cbr\u003eStatus: DISCONTINUED"}, {"color": "lightblue", "id": "GB 201501800 A", "label": "GB 201501800 A", "shape": "ellipse", "title": "Jurisdiction: GB\u003cbr\u003eType: Patent Application\u003cbr\u003eStatus: DISCONTINUED"}, {"color": "orange", "id": "CN 201510594293 A", "label": "CN 201510594293 A", "shape": "ellipse", "title": "Jurisdiction: CN\u003cbr\u003eType: Patent Application\u003cbr\u003eStatus: ACTIVE"}, {"color": "lightblue", "id": "US 201615760715 A", "label": "US 201615760715 A", "shape": "ellipse", "title": "Jurisdiction: US\u003cbr\u003eType: Granted Patent\u003cbr\u003eStatus: ACTIVE"}, {"color": "lightblue", "id": "CN 2016099059 W", "label": "CN 2016099059 W", "shape": "ellipse", "title": "Jurisdiction: WO\u003cbr\u003eType: Patent Application\u003cbr\u003eStatus: PENDING"}, {"color": "orange", "id": "US 0022200 W", "label": "US 0022200 W", "shape": "ellipse", "title": "Jurisdiction: WO\u003cbr\u003eType: Patent Application\u003cbr\u003eStatus: PENDING"}, {"color": "lightblue", "id": "US 37332999 A", "label": "US 37332999 A", "shape": "ellipse", "title": "Jurisdiction: US\u003cbr\u003eType: Granted Patent\u003cbr\u003eStatus: EXPIRED"}, {"color": "lightblue", "id": "AU 2000/065390 A", "label": "AU 2000/065390 A", "shape": "ellipse", "title": "Jurisdiction: AU\u003cbr\u003eType: Patent Application\u003cbr\u003eStatus: DISCONTINUED"}, {"color": "orange", "id": "US 202218291069 A", "label": "US 202218291069 A", "shape": "ellipse", "title": "Jurisdiction: US\u003cbr\u003eType: Patent Application\u003cbr\u003eStatus: PENDING"}, {"color": "lightblue", "id": "EP 22844792 A", "label": "EP 22844792 A", "shape": "ellipse", "title": "Jurisdiction: EP\u003cbr\u003eType: Search Report\u003cbr\u003eStatus: PENDING"}, {"color": "lightblue", "id": "CN 202280064441 A", "label": "CN 202280064441 A", "shape": "ellipse", "title": "Jurisdiction: CN\u003cbr\u003eType: Patent Application\u003cbr\u003eStatus: PENDING"}, {"color": "lightblue", "id": "CA 2022051139 W", "label": "CA 2022051139 W", "shape": "ellipse", "title": "Jurisdiction: WO\u003cbr\u003eType: Patent Application\u003cbr\u003eStatus: PENDING"}, {"color": "lightblue", "id": "JP 2024527718 A", "label": "JP 2024527718 A", "shape": "ellipse", "title": "Jurisdiction: JP\u003cbr\u003eType: Patent Application\u003cbr\u003eStatus: PENDING"}, {"color": "lightblue", "id": "CA 3226847 A", "label": "CA 3226847 A", "shape": "ellipse", "title": "Jurisdiction: CA\u003cbr\u003eType: Patent Application\u003cbr\u003eStatus: PENDING"}, {"color": "orange", "id": "CN 201810219179 A", "label": "CN 201810219179 A", "shape": "ellipse", "title": "Jurisdiction: CN\u003cbr\u003eType: Patent Application\u003cbr\u003eStatus: PENDING"}, {"color": "orange", "id": "TW 112139684 A", "label": "TW 112139684 A", "shape": "ellipse", "title": "Jurisdiction: TW\u003cbr\u003eType: Patent of Addition\u003cbr\u003eStatus: PENDING"}, {"color": "lightblue", "id": "IB 2023060484 W", "label": "IB 2023060484 W", "shape": "ellipse", "title": "Jurisdiction: WO\u003cbr\u003eType: Patent Application\u003cbr\u003eStatus: PENDING"}, {"color": "orange", "id": "US 2017/0042125 W", "label": "US 2017/0042125 W", "shape": "ellipse", "title": "Jurisdiction: WO\u003cbr\u003eType: Patent Application\u003cbr\u003eStatus: PENDING"}, {"color": "lightblue", "id": "US 201716315684 A", "label": "US 201716315684 A", "shape": "ellipse", "title": "Jurisdiction: US\u003cbr\u003eType: Granted Patent\u003cbr\u003eStatus: INACTIVE"}, {"color": "orange", "id": "CA 2476696 A", "label": "CA 2476696 A", "shape": "ellipse", "title": "Jurisdiction: CA\u003cbr\u003eType: Granted Patent\u003cbr\u003eStatus: EXPIRED"}, {"color": "lightblue", "id": "US 8718802 A", "label": "US 8718802 A", "shape": "ellipse", "title": "Jurisdiction: US\u003cbr\u003eType: Patent Application\u003cbr\u003eStatus: EXPIRED"}, {"color": "lightblue", "id": "JP 2003572358 A", "label": "JP 2003572358 A", "shape": "ellipse", "title": "Jurisdiction: JP\u003cbr\u003eType: Patent Application\u003cbr\u003eStatus: DISCONTINUED"}, {"color": "lightblue", "id": "AU 2003/225615 A", "label": "AU 2003/225615 A", "shape": "ellipse", "title": "Jurisdiction: AU\u003cbr\u003eType: Patent Application\u003cbr\u003eStatus: EXPIRED"}, {"color": "lightblue", "id": "EP 03743713 A", "label": "EP 03743713 A", "shape": "ellipse", "title": "Jurisdiction: EP\u003cbr\u003eType: Search Report\u003cbr\u003eStatus: EXPIRED"}, {"color": "lightblue", "id": "IL 16358804 A", "label": "IL 16358804 A", "shape": "ellipse", "title": "Jurisdiction: IL\u003cbr\u003eType: Patent Application\u003cbr\u003eStatus: DISCONTINUED"}, {"color": "lightblue", "id": "ES 03743713 T", "label": "ES 03743713 T", "shape": "ellipse", "title": "Jurisdiction: ES\u003cbr\u003eType: Granted Patent\u003cbr\u003eStatus: EXPIRED"}, {"color": "lightblue", "id": "US 50454405 A", "label": "US 50454405 A", "shape": "ellipse", "title": "Jurisdiction: US\u003cbr\u003eType: Patent Application\u003cbr\u003eStatus: DISCONTINUED"}, {"color": "lightblue", "id": "US 0306038 W", "label": "US 0306038 W", "shape": "ellipse", "title": "Jurisdiction: WO\u003cbr\u003eType: Patent Application\u003cbr\u003eStatus: PENDING"}, {"color": "lightblue", "id": "IL 16358803 A", "label": "IL 16358803 A", "shape": "ellipse", "title": "Jurisdiction: IL\u003cbr\u003eType: Patent Application\u003cbr\u003eStatus: EXPIRED"}, {"color": "orange", "id": "KR 20120000742 A", "label": "KR 20120000742 A", "shape": "ellipse", "title": "Jurisdiction: KR\u003cbr\u003eType: Patent Application\u003cbr\u003eStatus: ACTIVE"}, {"color": "orange", "id": "KR 20210017914 A", "label": "KR 20210017914 A", "shape": "ellipse", "title": "Jurisdiction: KR\u003cbr\u003eType: Granted Patent\u003cbr\u003eStatus: ACTIVE"}, {"color": "orange", "id": "RO 13715388 A", "label": "RO 13715388 A", "shape": "ellipse", "title": "Jurisdiction: RO\u003cbr\u003eType: Limited Patent\u003cbr\u003eStatus: EXPIRED"}, {"color": "orange", "id": "RU 2013121421 A", "label": "RU 2013121421 A", "shape": "ellipse", "title": "Jurisdiction: RU\u003cbr\u003eType: Granted Patent\u003cbr\u003eStatus: INACTIVE"}, {"color": "orange", "id": "US 202118257143 A", "label": "US 202118257143 A", "shape": "ellipse", "title": "Jurisdiction: US\u003cbr\u003eType: Patent Application\u003cbr\u003eStatus: PENDING"}, {"color": "lightblue", "id": "JP 2022570052 A", "label": "JP 2022570052 A", "shape": "ellipse", "title": "Jurisdiction: JP\u003cbr\u003eType: Unknown\u003cbr\u003eStatus: PENDING"}, {"color": "lightblue", "id": "EP 21906683 A", "label": "EP 21906683 A", "shape": "ellipse", "title": "Jurisdiction: EP\u003cbr\u003eType: Search Report\u003cbr\u003eStatus: PENDING"}, {"color": "lightblue", "id": "JP 2021046462 W", "label": "JP 2021046462 W", "shape": "ellipse", "title": "Jurisdiction: WO\u003cbr\u003eType: Patent Application\u003cbr\u003eStatus: PENDING"}, {"color": "orange", "id": "CA 2913402 A", "label": "CA 2913402 A", "shape": "ellipse", "title": "Jurisdiction: CA\u003cbr\u003eType: Patent Application\u003cbr\u003eStatus: PENDING"}, {"color": "lightblue", "id": "JP 2016517686 A", "label": "JP 2016517686 A", "shape": "ellipse", "title": "Jurisdiction: JP\u003cbr\u003eType: Granted Patent\u003cbr\u003eStatus: ACTIVE"}, {"color": "lightblue", "id": "GB 201310150 A", "label": "GB 201310150 A", "shape": "ellipse", "title": "Jurisdiction: GB\u003cbr\u003eType: Patent Application\u003cbr\u003eStatus: DISCONTINUED"}, {"color": "lightblue", "id": "ES 14733678 T", "label": "ES 14733678 T", "shape": "ellipse", "title": "Jurisdiction: ES\u003cbr\u003eType: Granted Patent\u003cbr\u003eStatus: ACTIVE"}, {"color": "lightblue", "id": "EP 14733678 A", "label": "EP 14733678 A", "shape": "ellipse", "title": "Jurisdiction: EP\u003cbr\u003eType: Patent Application\u003cbr\u003eStatus: ACTIVE"}, {"color": "lightblue", "id": "GB 2014051758 W", "label": "GB 2014051758 W", "shape": "ellipse", "title": "Jurisdiction: WO\u003cbr\u003eType: Search Report\u003cbr\u003eStatus: PENDING"}, {"color": "lightblue", "id": "US 201414896018 A", "label": "US 201414896018 A", "shape": "ellipse", "title": "Jurisdiction: US\u003cbr\u003eType: Patent Application\u003cbr\u003eStatus: PENDING"}, {"color": "orange", "id": "GB 9903631 W", "label": "GB 9903631 W", "shape": "ellipse", "title": "Jurisdiction: WO\u003cbr\u003eType: Search Report\u003cbr\u003eStatus: PENDING"}, {"color": "lightblue", "id": "EP 99954134 A", "label": "EP 99954134 A", "shape": "ellipse", "title": "Jurisdiction: EP\u003cbr\u003eType: Search Report\u003cbr\u003eStatus: DISCONTINUED"}, {"color": "lightblue", "id": "GB 9823975 A", "label": "GB 9823975 A", "shape": "ellipse", "title": "Jurisdiction: GB\u003cbr\u003eType: Patent Application\u003cbr\u003eStatus: DISCONTINUED"}, {"color": "lightblue", "id": "AU 2000/010572 A", "label": "AU 2000/010572 A", "shape": "ellipse", "title": "Jurisdiction: AU\u003cbr\u003eType: Patent Application\u003cbr\u003eStatus: DISCONTINUED"}, {"color": "lightblue", "id": "US 84753901 A", "label": "US 84753901 A", "shape": "ellipse", "title": "Jurisdiction: US\u003cbr\u003eType: Patent Application\u003cbr\u003eStatus: DISCONTINUED"}, {"color": "lightblue", "id": "CA 2348421 A", "label": "CA 2348421 A", "shape": "ellipse", "title": "Jurisdiction: CA\u003cbr\u003eType: Patent Application\u003cbr\u003eStatus: DISCONTINUED"}, {"color": "lightblue", "id": "JP 2000579627 A", "label": "JP 2000579627 A", "shape": "ellipse", "title": "Jurisdiction: JP\u003cbr\u003eType: Patent Application\u003cbr\u003eStatus: PENDING"}, {"color": "orange", "id": "EP 2017084007 W", "label": "EP 2017084007 W", "shape": "ellipse", "title": "Jurisdiction: WO\u003cbr\u003eType: Patent Application\u003cbr\u003eStatus: PENDING"}, {"color": "orange", "id": "US 74870303 A", "label": "US 74870303 A", "shape": "ellipse", "title": "Jurisdiction: US\u003cbr\u003eType: Patent Application\u003cbr\u003eStatus: DISCONTINUED"}, {"color": "orange", "id": "AU 2017/051399 W", "label": "AU 2017/051399 W", "shape": "ellipse", "title": "Jurisdiction: WO\u003cbr\u003eType: Patent Application\u003cbr\u003eStatus: PENDING"}, {"color": "orange", "id": "US 64444200 A", "label": "US 64444200 A", "shape": "ellipse", "title": "Jurisdiction: US\u003cbr\u003eType: Granted Patent\u003cbr\u003eStatus: EXPIRED"}, {"color": "lightblue", "id": "US 0023145 W", "label": "US 0023145 W", "shape": "ellipse", "title": "Jurisdiction: WO\u003cbr\u003eType: Patent Application\u003cbr\u003eStatus: PENDING"}, {"color": "lightblue", "id": "AU 2000/069295 A", "label": "AU 2000/069295 A", "shape": "ellipse", "title": "Jurisdiction: AU\u003cbr\u003eType: Patent Application\u003cbr\u003eStatus: DISCONTINUED"}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "patent", "to": "IB 2023060487 W"}, {"arrows": "to", "from": "IB 2023060487 W", "to": "TW 112139681 A"}, {"arrows": "to", "from": "patent", "to": "GB 2016050249 W"}, {"arrows": "to", "from": "GB 2016050249 W", "to": "EP 16704045 A"}, {"arrows": "to", "from": "GB 2016050249 W", "to": "GB 201501800 A"}, {"arrows": "to", "from": "patent", "to": "CN 201510594293 A"}, {"arrows": "to", "from": "CN 201510594293 A", "to": "US 201615760715 A"}, {"arrows": "to", "from": "CN 201510594293 A", "to": "CN 2016099059 W"}, {"arrows": "to", "from": "CN 201510594293 A", "to": "US 201615760715 A"}, {"arrows": "to", "from": "patent", "to": "US 0022200 W"}, {"arrows": "to", "from": "US 0022200 W", "to": "US 37332999 A"}, {"arrows": "to", "from": "US 0022200 W", "to": "AU 2000/065390 A"}, {"arrows": "to", "from": "patent", "to": "US 202218291069 A"}, {"arrows": "to", "from": "US 202218291069 A", "to": "EP 22844792 A"}, {"arrows": "to", "from": "US 202218291069 A", "to": "EP 22844792 A"}, {"arrows": "to", "from": "US 202218291069 A", "to": "CN 202280064441 A"}, {"arrows": "to", "from": "US 202218291069 A", "to": "CA 2022051139 W"}, {"arrows": "to", "from": "US 202218291069 A", "to": "JP 2024527718 A"}, {"arrows": "to", "from": "US 202218291069 A", "to": "CA 3226847 A"}, {"arrows": "to", "from": "patent", "to": "CN 201810219179 A"}, {"arrows": "to", "from": "patent", "to": "TW 112139684 A"}, {"arrows": "to", "from": "TW 112139684 A", "to": "IB 2023060484 W"}, {"arrows": "to", "from": "TW 112139684 A", "to": "IB 2023060484 W"}, {"arrows": "to", "from": "patent", "to": "US 2017/0042125 W"}, {"arrows": "to", "from": "US 2017/0042125 W", "to": "US 201716315684 A"}, {"arrows": "to", "from": "US 2017/0042125 W", "to": "US 201716315684 A"}, {"arrows": "to", "from": "patent", "to": "CA 2476696 A"}, {"arrows": "to", "from": "CA 2476696 A", "to": "US 8718802 A"}, {"arrows": "to", "from": "CA 2476696 A", "to": "JP 2003572358 A"}, {"arrows": "to", "from": "CA 2476696 A", "to": "AU 2003/225615 A"}, {"arrows": "to", "from": "CA 2476696 A", "to": "EP 03743713 A"}, {"arrows": "to", "from": "CA 2476696 A", "to": "EP 03743713 A"}, {"arrows": "to", "from": "CA 2476696 A", "to": "IL 16358804 A"}, {"arrows": "to", "from": "CA 2476696 A", "to": "US 8718802 A"}, {"arrows": "to", "from": "CA 2476696 A", "to": "ES 03743713 T"}, {"arrows": "to", "from": "CA 2476696 A", "to": "AU 2003/225615 A"}, {"arrows": "to", "from": "CA 2476696 A", "to": "US 50454405 A"}, {"arrows": "to", "from": "CA 2476696 A", "to": "EP 03743713 A"}, {"arrows": "to", "from": "CA 2476696 A", "to": "US 0306038 W"}, {"arrows": "to", "from": "CA 2476696 A", "to": "US 0306038 W"}, {"arrows": "to", "from": "CA 2476696 A", "to": "IL 16358803 A"}, {"arrows": "to", "from": "patent", "to": "KR 20120000742 A"}, {"arrows": "to", "from": "patent", "to": "KR 20210017914 A"}, {"arrows": "to", "from": "patent", "to": "RO 13715388 A"}, {"arrows": "to", "from": "patent", "to": "RU 2013121421 A"}, {"arrows": "to", "from": "patent", "to": "US 202118257143 A"}, {"arrows": "to", "from": "US 202118257143 A", "to": "JP 2022570052 A"}, {"arrows": "to", "from": "US 202118257143 A", "to": "EP 21906683 A"}, {"arrows": "to", "from": "US 202118257143 A", "to": "EP 21906683 A"}, {"arrows": "to", "from": "US 202118257143 A", "to": "JP 2021046462 W"}, {"arrows": "to", "from": "patent", "to": "CA 2913402 A"}, {"arrows": "to", "from": "CA 2913402 A", "to": "JP 2016517686 A"}, {"arrows": "to", "from": "CA 2913402 A", "to": "GB 201310150 A"}, {"arrows": "to", "from": "CA 2913402 A", "to": "ES 14733678 T"}, {"arrows": "to", "from": "CA 2913402 A", "to": "EP 14733678 A"}, {"arrows": "to", "from": "CA 2913402 A", "to": "EP 14733678 A"}, {"arrows": "to", "from": "CA 2913402 A", "to": "GB 2014051758 W"}, {"arrows": "to", "from": "CA 2913402 A", "to": "GB 2014051758 W"}, {"arrows": "to", "from": "CA 2913402 A", "to": "JP 2016517686 A"}, {"arrows": "to", "from": "CA 2913402 A", "to": "US 201414896018 A"}, {"arrows": "to", "from": "patent", "to": "GB 9903631 W"}, {"arrows": "to", "from": "GB 9903631 W", "to": "EP 99954134 A"}, {"arrows": "to", "from": "GB 9903631 W", "to": "GB 9823975 A"}, {"arrows": "to", "from": "GB 9903631 W", "to": "AU 2000/010572 A"}, {"arrows": "to", "from": "GB 9903631 W", "to": "US 84753901 A"}, {"arrows": "to", "from": "GB 9903631 W", "to": "CA 2348421 A"}, {"arrows": "to", "from": "GB 9903631 W", "to": "JP 2000579627 A"}, {"arrows": "to", "from": "GB 9903631 W", "to": "EP 99954134 A"}, {"arrows": "to", "from": "patent", "to": "EP 2017084007 W"}, {"arrows": "to", "from": "patent", "to": "US 74870303 A"}, {"arrows": "to", "from": "patent", "to": "AU 2017/051399 W"}, {"arrows": "to", "from": "patent", "to": "US 64444200 A"}, {"arrows": "to", "from": "US 64444200 A", "to": "US 0023145 W"}, {"arrows": "to", "from": "US 64444200 A", "to": "US 0023145 W"}, {"arrows": "to", "from": "US 64444200 A", "to": "AU 2000/069295 A"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>
